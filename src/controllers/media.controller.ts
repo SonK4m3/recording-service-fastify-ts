@@ -7,10 +7,10 @@ class MediaController {
   constructor() {}
 
   async getMediaFilePath(
-    request: FastifyRequest<{ Params: { filename: string } }>,
+    request: FastifyRequest<{ Params: { "*": string } }>,
     reply: FastifyReply
   ) {
-    const filename = request.params.filename;
+    const filename = request.params["*"];
     const storagePath = request.server.config.MEDIA_PATH;
     const mediaFilePath = MediaService.getMediaFilePath(filename);
     const mediaStoragePath = mediaService.getMediaStoragePath(
@@ -25,10 +25,10 @@ class MediaController {
   }
 
   async getRecordingHandler(
-    request: FastifyRequest<{ Params: { filename: string } }>,
+    request: FastifyRequest<{ Params: { "*": string } }>,
     reply: FastifyReply
   ) {
-    const filename = request.params.filename;
+    const filename = request.params["*"];
     const storagePath = request.server.config.MEDIA_PATH;
     const mediaStoragePathName = mediaService.getMediaStoragePath(
       storagePath,
