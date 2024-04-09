@@ -1,13 +1,18 @@
 import fastify, { errorCodes } from "fastify";
 import routes from "./routes";
 import corsPlugin from "./plugins/cors.plugin";
+import envPlugin, { EnvironmentVariables } from "./plugins/env.plugin";
+import dotenv from "dotenv";
+dotenv.config();
 
 export const server = fastify({
   logger: false,
 });
 
 declare module "fastify" {
-  export interface FastifyInstance {}
+  export interface FastifyInstance {
+    config: EnvironmentVariables;
+  }
 
   interface FastifyContextConfig {
     allowedRoles?: string[];
@@ -19,6 +24,7 @@ server.register(corsPlugin, {
   origin: [String(process.env.ORIGIN)],
   methods: ["GET"],
 });
+server.register(envPlugin);
 
 server.setErrorHandler((error, request, reply) => {
   if (error instanceof errorCodes.FST_ERR_BAD_STATUS_CODE) {

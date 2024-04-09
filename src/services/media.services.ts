@@ -3,7 +3,7 @@ import { WavFile } from "../validators/wav.schema";
 import path from "path";
 
 class MediaService {
-  constructor(private readonly storagePath: string) {}
+  constructor() {}
 
   //   async uploadWavFile(file: any): Promise<WavFile> {
   //     const filename = `${uuidv4()}.wav`;
@@ -18,13 +18,11 @@ class MediaService {
     return path.resolve(__dirname, "media", filename); // Assumes media files are stored in the 'media' directory
   }
 
-  getMediaStoragePath(filename: string): string {
-    return path.join(this.storagePath, filename);
+  getMediaStoragePath(storagePath: string, filename: string): string {
+    return path.join(storagePath, filename);
   }
 
-  async getWavFile(filename: string): Promise<Buffer> {
-    const filePath = path.join(this.storagePath, filename);
-
+  async getWavFile(filePath: string): Promise<Buffer> {
     const fileStream = fs.readFileSync(filePath);
     return fileStream;
   }

@@ -1,8 +1,7 @@
-import { FastifyReply, FastifyRequest } from "fastify";
+import fastify, { FastifyReply, FastifyRequest } from "fastify";
 import MediaService from "../services/media.services";
 
-const filePath = String(process.env.MEDIA_PATH || "");
-const mediaService: MediaService = new MediaService(filePath);
+const mediaService: MediaService = new MediaService();
 
 class MediaController {
   constructor() {}
@@ -12,8 +11,12 @@ class MediaController {
     reply: FastifyReply
   ) {
     const filename = request.params.filename;
+    const storagePath = request.server.config.MEDIA_PATH;
     const mediaFilePath = MediaService.getMediaFilePath(filename);
-    const mediaStoragePath = mediaService.getMediaStoragePath(filename);
+    const mediaStoragePath = mediaService.getMediaStoragePath(
+      storagePath,
+      filename
+    );
 
     reply.status(200).send({
       mediaFilePath: mediaFilePath,
@@ -26,7 +29,13 @@ class MediaController {
     reply: FastifyReply
   ) {
     const filename = request.params.filename;
-    const fileStream = await mediaService.getWavFile(filename);
+    const storagePath = request.server.config.MEDIA_PATH;
+    const mediaStoragePathName = mediaService.getMediaStoragePath(
+      storagePath,
+      filename
+    );
+
+    const fileStream = await mediaService.getWavFile(mediaStoragePathName);
 
     reply.type("audio/wav").send(fileStream);
   }
