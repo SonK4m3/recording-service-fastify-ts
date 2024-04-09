@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import MediaService from "../services/media.services";
 
-const filePath = "D:/Documents/recording";
+const filePath = String(process.env.MEDIA_PATH || "");
 const mediaService: MediaService = new MediaService(filePath);
 
 class MediaController {
