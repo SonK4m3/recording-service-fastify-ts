@@ -1,20 +1,18 @@
 {
-  "name": "fastify-ts-prisma",
+  "name": "fastify-ts",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "node src/index.ts",
-    "dev": "ts-node-dev --respawn --transpile-only --exit-child src/index.ts",
-    "start:migrate:dev": "npx prisma migrate deploy && npx prisma generate && npm run dev"
+    "dev": "ts-node-dev --respawn --transpile-only --exit-child src/index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@fastify/cors": "^9.0.1",
-    "@prisma/client": "^5.8.1",
     "fastify": "^4.25.2",
     "fastify-plugin": "^4.5.1",
     "fastify-zod": "^1.4.0",

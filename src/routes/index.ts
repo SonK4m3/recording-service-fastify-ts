@@ -1,11 +1,9 @@
 import { FastifyInstance, FastifyRequest } from "fastify";
-import productRoutes from "./product.route";
 import fooRoutes from "./foo.route";
-import { productSchemas } from "../validators/product.schema";
 import mediaRoutes from "./media.route";
 
 const routes = async (server: FastifyInstance) => {
-  for (const schema of [...productSchemas]) {
+  for (const schema of []) {
     server.addSchema(schema);
   }
 
@@ -32,7 +30,6 @@ const routes = async (server: FastifyInstance) => {
 
   // register sub-routes
   server.register(fooRoutes, { prefix: "/foo" });
-  server.register(productRoutes, { prefix: "/products" });
   server.register(mediaRoutes, { prefix: "/media" });
 };
 
