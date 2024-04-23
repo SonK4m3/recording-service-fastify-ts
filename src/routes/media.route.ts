@@ -6,7 +6,12 @@ async function mediaRoutes(server: FastifyInstance) {
   server.get(
     "/*",
     (
-      request: FastifyRequest<{ Params: { "*": string } }>,
+      request: FastifyRequest<{
+        Params: { "*": string };
+        Querystring: {
+          path: string;
+        };
+      }>,
       reply: FastifyReply
     ) => mediaController.getRecordingHandler(request, reply)
   );
@@ -14,7 +19,12 @@ async function mediaRoutes(server: FastifyInstance) {
   server.get(
     "/path/*",
     (
-      request: FastifyRequest<{ Params: { "*": string } }>,
+      request: FastifyRequest<{
+        Params: { "*": string };
+        Querystring: {
+          path: string;
+        };
+      }>,
       reply: FastifyReply
     ) => mediaController.getMediaFilePath(request, reply)
   );

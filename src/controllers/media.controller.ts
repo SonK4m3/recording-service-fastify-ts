@@ -7,33 +7,59 @@ class MediaController {
   constructor() {}
 
   async getMediaFilePath(
-    request: FastifyRequest<{ Params: { "*": string } }>,
+    request: FastifyRequest<{
+      Params: { "*": string };
+      Querystring: {
+        path: string;
+      };
+    }>,
     reply: FastifyReply
   ) {
+    const path = request.query.path;
     const filename = request.params["*"];
+
+    if (path !== undefined) {
+      const mediaStoragePath = path + "/" + filename.split("/").reverse()[0];
+
+      reply.status(200).send({
+        path: path,
+        mediaStoragePath: mediaStoragePath,
+      });
+    }
+
     const storagePath = request.server.config.MEDIA_PATH;
-    const mediaFilePath = MediaService.getMediaFilePath(filename);
     const mediaStoragePath = mediaService.getMediaStoragePath(
       storagePath,
       filename
     );
 
     reply.status(200).send({
-      mediaFilePath: mediaFilePath,
       mediaStoragePath: mediaStoragePath,
     });
   }
 
   async getRecordingHandler(
-    request: FastifyRequest<{ Params: { "*": string } }>,
+    request: FastifyRequest<{
+      Params: { "*": string };
+      Querystring: {
+        path: string;
+      };
+    }>,
     reply: FastifyReply
   ) {
+    const path = request.query.path;
     const filename = request.params["*"];
     const storagePath = request.server.config.MEDIA_PATH;
-    const mediaStoragePathName = mediaService.getMediaStoragePath(
-      storagePath,
-      filename
-    );
+    let mediaStoragePathName = "";
+
+    if (path !== undefined) {
+      mediaStoragePathName = path + "/" + filename.split("/").reverse()[0];
+    } else {
+      mediaStoragePathName = mediaService.getMediaStoragePath(
+        storagePath,
+        filename
+      );
+    }
 
     const fileStream = await mediaService.getWavFile(mediaStoragePathName);
 
